@@ -1,0 +1,78 @@
+<!-- Code Rain Matrix Animation - UMSO Compatible -->
+<div style="position: relative; width: 100%; height: 200px; overflow: hidden; background: #0d3b6f; margin: 0; padding: 0;">
+    <canvas id="matrix-canvas" style="display: block; width: 100%; height: 100%; margin: 0; padding: 0;"></canvas>
+</div>
+
+<script>
+(function() {
+    // ============================================
+    // CODE RAIN MATRIX ANIMATION
+    // ============================================
+    const canvas = document.getElementById('matrix-canvas');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size
+    function resizeCanvas() {
+        const container = canvas.parentElement;
+        canvas.width = container.offsetWidth;
+        canvas.height = container.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Matrix characters
+    const chars = '01アイウエオカキクケコサシスセソタチツテト';
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+
+    // Array of drops
+    const drops = [];
+    for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * (canvas.height / fontSize);
+    }
+
+    // Colors
+    const matrixColor = '#d6ff3f';
+    const fadeColor = 'rgba(13, 59, 111, 0.05)';
+
+    // Draw function
+    function draw() {
+        // Fade effect
+        ctx.fillStyle = fadeColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw characters
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            const x = i * fontSize;
+            const y = drops[i] * fontSize;
+
+            // Variable opacity
+            const opacity = Math.random() * 0.5 + 0.3;
+            const alpha = Math.floor(opacity * 255).toString(16).padStart(2, '0');
+            ctx.fillStyle = matrixColor + alpha;
+            ctx.fillText(text, x, y);
+
+            // Reset drop
+            if (y > canvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+
+            // Increment (VITESSE TRÈS LENTE)
+            drops[i] += 0.15; // Ultra lent
+        }
+    }
+
+    // Animation loop
+    const animationInterval = setInterval(draw, 33);
+
+    // Cleanup on remove (optionnel)
+    window.addEventListener('beforeunload', function() {
+        clearInterval(animationInterval);
+    });
+})();
+</script>
