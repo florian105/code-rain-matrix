@@ -1,0 +1,4 @@
+# Linguist language overrides
+*.html linguist-detectable=false
+*.md linguist-documentation
+*.js linguist-detectable=true
